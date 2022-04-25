@@ -1,0 +1,23 @@
+{
+  "name": "text-spinner",
+  "version": "0.1.0",
+  "description": "## INSTALL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phailgorithm/text-spinner.git"
+  },
+  "author": "Mohsin Ul Islam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phailgorithm/text-spinner/issues"
+  },
+  "homepage": "https://github.com/phailgorithm/text-spinner#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
