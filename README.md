@@ -4,7 +4,7 @@
 
 ```
 touch .directus.env
-docker-compose up -d postgres
+docker-compose up -d postgresql
 
 # spin up directus and wait for install / password generation
 docker-compose up directus
@@ -21,4 +21,3 @@ Under Archive, enable or disalbe `Archive App Filter`
 Save.
 
 Now collections should be visible
-
