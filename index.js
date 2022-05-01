@@ -3,22 +3,28 @@ const express = require("express");
 const twig = require("twig");
 const { Directus } = require("@directus/sdk");
 
-const directus = new Directus(process.env.DIRECTUS_URL);
 const app = express();
+const directus = new Directus(process.env.DIRECTUS_URL);
+
 app.use(express.json());
+app.get("/text-spinner/:id", async (req, res) => {
+  const id = req.params.id;
+  const input = req.body; // ideally should not read from BODY in GET request
 
-const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
+  const spinnerItems = directus.items("spinner");
+  const spinnerVariations = directus.items("spinner_variation");
 
-app.get("/text-spinner", (req, res) => {
-  // TODO: read these from database via directus
-  let merge = false;
-  let items = [];
+  const spinner = await spinnerItems.readOne(id);
+  const variations = await spinnerVariations.readMany(spinner.spinners);
+
+  const merge = spinner.merge;
+  const items = variations.data;
+  const tokenCount = spinner.tokens;
+  const condition = !!spinner.condition;
+
   let output = [];
-  let tokenCount = 0;
-  let condition = false;
-
   if (merge) {
-    for (let i = tokenCount; i > 0; i--) {
+    for (let i = tokenCount; i >= 0; i--) {
       const idx = rand(0, items.length - 1);
       output.push(items[idx]);
       items.splice(idx, 1);
@@ -39,11 +45,13 @@ app.get("/text-spinner", (req, res) => {
     //   variation = elem["content"];
     // }
 
-    preparsed.push(elem["content"]);
+    preparsed.push(elem.content);
   }
-  preparsed = `{%% if (${condition}) %%}${preparsed.join(" ")}{%% endif %%}`;
-  return res.status(200).send(twig.twig({ data: preparsed }).render(req.body));
+  preparsed = `{% if (${condition}) %}${preparsed.join(" ")}{% endif %}`;
+  return res.status(200).send(twig.twig({ data: preparsed }).render(input));
 });
+
+const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
 const bootstrap = async () => {
   await directus.auth.login({
