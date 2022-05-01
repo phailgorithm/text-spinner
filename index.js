@@ -2,53 +2,17 @@ const http = require("http");
 const express = require("express");
 const twig = require("twig");
 const { Directus } = require("@directus/sdk");
+const MarkdownIt = require("markdown-it");
 
 const app = express();
 const directus = new Directus(process.env.DIRECTUS_URL);
+const markdown = new MarkdownIt();
 
 app.use(express.json());
-app.get("/text-spinner/:id", async (req, res) => {
-  const id = req.params.id;
-  const input = req.body; // ideally should not read from BODY in GET request
-
-  const spinnerItems = directus.items("spinner");
-  const spinnerVariations = directus.items("spinner_variation");
-
-  const spinner = await spinnerItems.readOne(id);
-  const variations = await spinnerVariations.readMany(spinner.spinners);
-
-  const merge = spinner.merge;
-  const items = variations.data;
-  const tokenCount = spinner.tokens;
-  const condition = !!spinner.condition;
-
-  let output = [];
-  if (merge) {
-    for (let i = tokenCount; i >= 0; i--) {
-      const idx = rand(0, items.length - 1);
-      output.push(items[idx]);
-      items.splice(idx, 1);
-    }
-  } else {
-    output = [items[rand(0, items.length - 1)]];
-  }
-
-  let preparsed = [];
-  for (let elem of output) {
-    // TODO: use markdown parser
-    // const contentType = elem["content_type"];
-    // let variation = null;
-    // if (contentType == "markdown") {
-    //   const markdownParser = new Markdown();
-    //   variation = markdownParser.text(elem["content"]);
-    // } else {
-    //   variation = elem["content"];
-    // }
-
-    preparsed.push(elem.content);
-  }
-  preparsed = `{% if (${condition}) %}${preparsed.join(" ")}{% endif %}`;
-  return res.status(200).send(twig.twig({ data: preparsed }).render(input));
+app.get("/text-spinner/:id", (req, res) => {
+  spin(req.params.id, req.query)
+    .then((template) => res.send(template))
+    .catch((err) => res.status(500).send(err));
 });
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
@@ -59,6 +23,41 @@ const bootstrap = async () => {
     password: process.env.DIRECTUS_PASS,
   });
 };
+
+const spin = (id, input) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const spinnerItems = directus.items("spinner");
+      const spinnerVariations = directus.items("spinner_variation");
+
+      const spinner = await spinnerItems.readOne(id);
+      const variations = await spinnerVariations.readMany(spinner.spinners);
+
+      const items = variations.data;
+      const tokenCount = spinner.tokens;
+      const condition = !!spinner.condition;
+
+      const output = [];
+      for (let i = tokenCount; i >= 0; i--) {
+        const idx = rand(0, items.length - 1);
+        output.push(items[idx]);
+        items.splice(idx, 1);
+      }
+
+      let preparsed = [];
+      for (let elem of output) {
+        if (elem.type == "markdown") {
+          preparsed.push(markdown.render(elem.content));
+        } else {
+          preparsed.push(elem.content);
+        }
+      }
+      preparsed = `{% if (${condition}) %}${preparsed.join(" ")}{% endif %}`;
+      resolve(twig.twig({ data: preparsed }).render(input));
+    } catch (err) {
+      reject(err);
+    }
+  });
 
 bootstrap().then(() => {
   http.createServer(app).listen(process.env.PORT || 8080, () => {
