@@ -1,14 +1,26 @@
 openapi: 3.0.0
+
 info:
   title: Text Spinner API
   description: This is a simple text spinner API
   version: 0.1.0
+
 servers:
   - url: http://localhost:8080
     description: Local development environment server
+
+components:
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 paths:
   /text-spinner/{id}:
     get:
+      security:
+        - bearerToken: []
       summary: Returns a spinner text
       parameters:
         - name: id
