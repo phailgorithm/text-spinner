@@ -9,7 +9,7 @@ const auth = (req, res, next) => {
   const header = req.headers.authorization.split(" ");
   if (header.length != 2 || header[0] !== "Bearer") {
     return res
-      .status(421)
+      .status(422)
       .send("Invalid auth header format. Should be: Bearer <token>");
   }
 
