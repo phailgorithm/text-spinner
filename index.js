@@ -31,7 +31,7 @@ const spin = (id, input) =>
       const condition = !!spinner.condition;
 
       const output = [];
-      for (let i = tokenCount; i >= 0; i--) {
+      for (let i = tokenCount; i > 0; i--) {
         const idx = rand(0, items.length - 1);
         output.push(items[idx]);
         items.splice(idx, 1);
