@@ -4,11 +4,15 @@ const twig = require("twig");
 const directus = require("./providers/directus");
 const auth = require("./middlewares/auth");
 const MarkdownIt = require("markdown-it");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
 
 const app = express();
 const markdown = new MarkdownIt();
 
 app.use(express.json());
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(YAML.load("./openapi.yaml")));
+
 app.get("/text-spinner/:id", auth, (req, res) => {
   spin(req.params.id, req.query)
     .then((template) => res.send(template))

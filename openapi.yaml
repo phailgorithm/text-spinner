@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Text Spinner API
+  description: This is a simple text spinner API
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080
+    description: Local development environment server
+paths:
+  /text-spinner/{id}:
+    get:
+      summary: Returns a spinner text
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique id of the spinner.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      description: Returns a spinner text.
+      responses:
+        "200":
+          description: A string of spinner text
+          content:
+            text/html:
+              schema:
+                type: string
+        "403":
+          description: Request is not authorized
+        "404":
+          description: A spinner with the specified id was not found.
+        "422":
+          description: Invalid request format.
+        "500":
+          description: Internal Server Error
