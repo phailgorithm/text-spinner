@@ -22,5 +22,8 @@
     "express": "^4.17.3",
     "markdown-it": "^13.0.0",
     "twig": "^1.15.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
