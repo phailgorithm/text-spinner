@@ -1,15 +1,15 @@
 const http = require("http");
 const express = require("express");
 const twig = require("twig");
-const { Directus } = require("@directus/sdk");
+const directus = require("./providers/directus");
+const auth = require("./middlewares/auth");
 const MarkdownIt = require("markdown-it");
 
 const app = express();
-const directus = new Directus(process.env.DIRECTUS_URL);
 const markdown = new MarkdownIt();
 
 app.use(express.json());
-app.get("/text-spinner/:id", (req, res) => {
+app.get("/text-spinner/:id", auth, (req, res) => {
   spin(req.params.id, req.query)
     .then((template) => res.send(template))
     .catch((err) => res.status(500).send(err));
