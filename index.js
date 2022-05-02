@@ -17,13 +17,6 @@ app.get("/text-spinner/:id", auth, (req, res) => {
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
-const bootstrap = async () => {
-  await directus.auth.login({
-    email: process.env.DIRECTUS_EMAIL,
-    password: process.env.DIRECTUS_PASS,
-  });
-};
-
 const spin = (id, input) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -59,8 +52,6 @@ const spin = (id, input) =>
     }
   });
 
-bootstrap().then(() => {
-  http.createServer(app).listen(process.env.PORT || 8080, () => {
-    console.log(`server listening on: ${process.env.PORT || 8080}`);
-  });
+http.createServer(app).listen(process.env.PORT || 8080, () => {
+  console.log(`server listening on: ${process.env.PORT || 8080}`);
 });
