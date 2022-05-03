@@ -30,6 +30,12 @@ The openapi documentation with swagger UI can be accessed here: http://localhost
 
 ## Development Environment
 
+Run the below command to start the development environment
+
+```
+docker-compose up --build
+```
+
 ### Nodemon
 
 Use nodemon during development because it automatically restarts the http server whenever there is a change in any of javascript files. It removes the overhead of manually restarting the server everytime there is a change in code.
