@@ -19,7 +19,8 @@ app.get("/text-spinner/:id", auth, (req, res) => {
     .catch((err) => res.status(500).send(err));
 });
 
-const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
+const rand = (min, max) =>
+  Math.abs(Math.floor(Math.sin(Date.now()) * (max - min) + min));
 
 const spin = (id, input) =>
   new Promise(async (resolve, reject) => {
