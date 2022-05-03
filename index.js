@@ -27,7 +27,20 @@ const spin = (id, input) =>
       const spinnerItems = directus.items("spinner");
       const spinnerVariations = directus.items("spinner_variation");
 
-      const spinner = await spinnerItems.readOne(id);
+      const spinner = isNaN(Number(id))
+        ? (
+            await spinnerItems.readByQuery({
+              limit: 1,
+              filter: {
+                name: {
+                  _eq: id,
+                },
+              },
+            })
+          ).data[0]
+        : await spinnerItems.readOne(id);
+
+      if (spinner === undefined) return resolve({});
       const variations = await spinnerVariations.readMany(spinner.spinners);
 
       const items = variations.data;
