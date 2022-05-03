@@ -6,7 +6,7 @@ info:
   version: 0.1.0
 
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:3000
     description: Local development environment server
 
 components:
@@ -31,17 +31,17 @@ paths:
             type: string
       description: Returns a spinner text.
       responses:
-        "200":
+        '200':
           description: A string of spinner text
           content:
             text/html:
               schema:
                 type: string
-        "403":
+        '403':
           description: Request is not authorized
-        "404":
+        '404':
           description: A spinner with the specified id was not found.
-        "422":
+        '422':
           description: Invalid request format.
-        "500":
+        '500':
           description: Internal Server Error
