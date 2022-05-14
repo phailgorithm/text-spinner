@@ -1,4 +1,3 @@
-const http = require('http');
 const express = require('express');
 const twig = require('twig');
 const directus = require('./providers/directus');
@@ -6,12 +5,21 @@ const auth = require('./middlewares/auth');
 const MarkdownIt = require('markdown-it');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+const { version } = require('../package.json');
 
 const app = express();
 const markdown = new MarkdownIt();
 
 app.use(express.json());
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(YAML.load('./openapi.yaml')));
+app.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(YAML.load('./spec/openapi.yaml'))
+);
+
+app.get('/', (_, res) =>
+  res.status(200).json({ api: 'text-spinner', version: version })
+);
 
 app.get('/text-spinner/:id', auth, (req, res) => {
   spin(req.params.id, req.query)
@@ -70,6 +78,4 @@ const spin = (id, input) =>
     }
   });
 
-http.createServer(app).listen(process.env.PORT || 3000, () => {
-  console.log(`server listening on: ${process.env.PORT || 3000}`);
-});
+module.exports = app;
