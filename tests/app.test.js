@@ -36,3 +36,39 @@ test('GET /text-spinner/:id with invalid auth header', () => {
       );
     });
 });
+
+test('GET /text-spinner/:id with missing bearer', () => {
+  request(app)
+    .get('/text-spinner/1')
+    .set('Authorization', 'sometoken')
+    .then((response) => {
+      expect(response.statusCode).toBe(422);
+      expect(response.text).toEqual(
+        'Invalid auth header format. Should be: Bearer <token>'
+      );
+    });
+});
+
+test('GET /text-spinner/:id with wrong bearer', () => {
+  request(app)
+    .get('/text-spinner/1')
+    .set('Authorization', 'bearer sometoken')
+    .then((response) => {
+      expect(response.statusCode).toBe(422);
+      expect(response.text).toEqual(
+        'Invalid auth header format. Should be: Bearer <token>'
+      );
+    });
+});
+
+test('GET /text-spinner/:id with missing token', () => {
+  request(app)
+    .get('/text-spinner/1')
+    .set('Authorization', 'Bearer')
+    .then((response) => {
+      expect(response.statusCode).toBe(422);
+      expect(response.text).toEqual(
+        'Invalid auth header format. Should be: Bearer <token>'
+      );
+    });
+});
