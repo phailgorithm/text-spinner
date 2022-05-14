@@ -1,4 +1,4 @@
-version: "3.5"
+version: '3.5'
 
 volumes:
   data-postgresql:
@@ -26,7 +26,7 @@ services:
       DB_DATABASE: ${DIRECTUS_ENV_DB_DATABASE:-postgres}
       DB_USER: ${DIRECTUS_ENV_DB_USER:-postgres}
       DB_PASSWORD: ${DIRECTUS_ENV_DB_PASSWORD:-postgres}
-      CACHE_ENABLED: "false"
+      CACHE_ENABLED: 'false'
       PUBLIC_URL: ${DIRECTUS_BASE_URI:-http://localhost:8055}
       AUTH_PROVIDERS: ${DIRECTUS_AUTH_PROVIDERS:-}
 
@@ -34,7 +34,7 @@ services:
     image: postgres:13
     container_name: phailgorithm.text-spinner.postgresql
     restart: always
-    shm_size: "2gb"
+    shm_size: '2gb'
     volumes:
       - data-postgresql:/var/lib/postgresql/data
     ports:
@@ -55,6 +55,6 @@ services:
       - .:/app
       - ./node_modules:/app/node_modules
     working_dir: /app
-    command: node index.js
+    command: npm run start
     ports:
-      - ${NODE_LISTEN:-127.0.0.1:3000:8080}
+      - ${NODE_LISTEN:-127.0.0.1:3000:3000}
