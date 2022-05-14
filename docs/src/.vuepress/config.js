@@ -4,7 +4,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'Text Spinner Docs',
+  title: 'Text Spinner',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -45,8 +45,8 @@ module.exports = {
         link: '/config/',
       },
       {
-        text: 'VuePress',
-        link: 'https://v1.vuepress.vuejs.org',
+        text: 'Text Spinner',
+        link: 'https://spinner.phailgorithm.app/',
       },
     ],
     sidebar: {
@@ -54,7 +54,7 @@ module.exports = {
         {
           title: 'Guide',
           collapsable: false,
-          children: ['', 'using-vue'],
+          children: ['', 'local-dev', 'api-spec', 'directus'],
         },
       ],
     },
