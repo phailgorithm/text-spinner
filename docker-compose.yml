@@ -53,6 +53,7 @@ services:
       DIRECTUS_URL:
     volumes:
       - .:/app
+      - ./docs/src/.vuepress/dist/:/vuepress
       - ./node_modules:/app/node_modules
     working_dir: /app
     command: npm run start
