@@ -17,7 +17,7 @@ jobs:
           cat >>~/.ssh/config <<END
           Host staging
             HostName $SSH_HOST
-            Port $STAGING_SSH_PORT
+            Port $SSH_PORT
             User $SSH_USER
             IdentityFile ~/.ssh/staging.key
             StrictHostKeyChecking no
@@ -28,6 +28,7 @@ jobs:
           SSH_USER: ${{ secrets.STAGING_SSH_USER }}
           SSH_KEY: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          SSH_PORT: ${{ secrets.STAGING_SSH_PORT }}
 
       - name: Stop the server
         run: ssh staging 'ls -lah && docker-compose ps'
