@@ -17,6 +17,7 @@ jobs:
           cat >>~/.ssh/config <<END
           Host staging
             HostName $SSH_HOST
+            Port $STAGING_SSH_PORT
             User $SSH_USER
             IdentityFile ~/.ssh/staging.key
             StrictHostKeyChecking no
