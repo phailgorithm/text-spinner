@@ -1,3 +1,4 @@
 .env
 .directus.env
 node_modules
+dist

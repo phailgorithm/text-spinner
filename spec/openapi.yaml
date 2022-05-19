@@ -17,7 +17,7 @@ components:
       bearerFormat: JWT
 
 paths:
-  /text-spinner/{id}:
+  /api/v1/spinners/{id}:
     get:
       security:
         - bearerToken: []

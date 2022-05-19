@@ -17,12 +17,12 @@ app.use(
   swaggerUi.setup(YAML.load('./spec/openapi.yaml'))
 );
 
-app.use('/', express.static('/vuepress'))
+app.use('/', express.static('/vuepress'));
 /*app.get('/', (_, res) =>
   res.status(200).json({ api: 'text-spinner', version: version })
 );*/
 
-app.get('/text-spinner/:id', auth, (req, res) => {
+app.get('/api/v1/spinners/:id', auth, (req, res) => {
   spin(req.params.id, req.query)
     .then((template) => res.send(template))
     .catch((err) => res.status(500).send(err));
