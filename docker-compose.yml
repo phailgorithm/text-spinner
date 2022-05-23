@@ -58,4 +58,4 @@ services:
     working_dir: /app
     command: npm run start
     ports:
-      - ${NODE_LISTEN:-127.0.0.1:3000:3000}
+      - ${NODE_LISTEN:-127.0.0.1:3000}:3000
