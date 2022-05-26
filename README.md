@@ -39,3 +39,17 @@ docker-compose up --build
 ### Nodemon
 
 Use nodemon during development because it automatically restarts the http server whenever there is a change in any of javascript files. It removes the overhead of manually restarting the server everytime there is a change in code.
+
+### Deployment
+
+In order to deploy the app run
+
+```
+make
+```
+
+and then
+
+```
+docker-compose up -d --build
+```
