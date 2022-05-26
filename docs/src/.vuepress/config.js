@@ -54,7 +54,7 @@ module.exports = {
         {
           title: 'Guide',
           collapsable: false,
-          children: ['', 'local-dev', 'api-spec', 'directus'],
+          children: ['', 'local-dev', 'api-spec', 'directus', 'deploy'],
         },
       ],
     },
