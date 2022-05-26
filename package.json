@@ -23,6 +23,7 @@
     "@directus/sdk": "^9.9.1",
     "express": "^4.17.3",
     "markdown-it": "^13.0.0",
+    "morgan": "^1.10.0",
     "swagger-ui-express": "^4.3.0",
     "twig": "^1.15.4",
     "yamljs": "^0.3.0"

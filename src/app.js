@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 const twig = require('twig');
 const directus = require('./providers/directus');
 const auth = require('./middlewares/auth');
@@ -10,6 +11,7 @@ const { version } = require('../package.json');
 const app = express();
 const markdown = new MarkdownIt();
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(
   '/docs',
