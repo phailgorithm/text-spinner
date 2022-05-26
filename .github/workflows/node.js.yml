@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,7 +18,6 @@ jobs:
         node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
- 
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -45,8 +43,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      # Check code formatting
+      - name: Run prettier
+        run: node_modules/.bin/prettier --check src/**/*.js
+
       # Finally, run our tests
       - name: Run the tests
         run: npm test
-        
-        
