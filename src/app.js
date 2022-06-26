@@ -25,13 +25,32 @@ app.use('/', express.static('/vuepress'));
 );*/
 
 app.get('/api/v1/spinners/:id', auth, (req, res) => {
-  spin(req.params.id, req.query)
+  spin(req.params.id, { ...req.query, ...req.body })
     .then((template) => res.send(template))
     .catch((err) => res.status(500).send(err));
 });
 
 const rand = (min, max) =>
   Math.abs(Math.floor(Math.sin(Date.now()) * (max - min) + min));
+
+// custom twig filters
+twig.extendFilter('spin', (value, separator = ',') => {
+  const values = value.split(separator);
+  return values[rand(0, values.length - 1)];
+});
+
+twig.extendFilter('random', (values, min, max) => {
+  console.log(values);
+  return [];
+  const count = Math.max(1, Math.min(rand(min, max), values.length));
+  const result = [];
+  for (let i = 0; i < count; i++) {
+    const idx = rand(0, values.length - 1);
+    result.append(values[idx]);
+    values.splice(idx, 1);
+  }
+  return result;
+});
 
 const spin = (id, input) =>
   new Promise(async (resolve, reject) => {
