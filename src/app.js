@@ -27,7 +27,7 @@ app.use('/', express.static('/vuepress'));
 app.get('/api/v1/spinners/:id', auth, (req, res) => {
   spin(req.params.id, { ...req.query, ...req.body })
     .then((template) => res.send(template))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => res.status(200).send(''));
 });
 
 const rand = (min, max) =>
@@ -39,14 +39,18 @@ twig.extendFilter('spin', (value, separator = ',') => {
   return values[rand(0, values.length - 1)];
 });
 
-twig.extendFilter('random', (values, min, max) => {
-  console.log(values);
-  return [];
-  const count = Math.max(1, Math.min(rand(min, max), values.length));
+twig.extendFilter('random', (values, minmax) => {
+  if (values === undefined || values.length == 0 || minmax.length < 2)
+    return [];
+
   const result = [];
+  const min = minmax[0];
+  const max = minmax[1];
+  const count = Math.max(1, Math.min(rand(min, max), values.length));
+
   for (let i = 0; i < count; i++) {
     const idx = rand(0, values.length - 1);
-    result.append(values[idx]);
+    result.push(values[idx]);
     values.splice(idx, 1);
   }
   return result;
@@ -69,9 +73,9 @@ const spin = (id, input) =>
               },
             })
           ).data[0]
-        : await spinnerItems.readOne(id);
+        : await spinnerItems.readOne(id, {});
 
-      if (spinner === undefined) return resolve({});
+      if (spinner === undefined) return resolve('');
       const variations = await spinnerVariations.readMany(spinner.spinners);
 
       const items = variations.data;
@@ -94,7 +98,7 @@ const spin = (id, input) =>
         }
       }
       preparsed = `{% if (${condition}) %}${preparsed.join(' ')}{% endif %}`;
-      resolve(twig.twig({ data: preparsed }).render(input));
+      resolve(twig.twig({ data: preparsed }).render(input).trim());
     } catch (err) {
       reject(err);
     }
